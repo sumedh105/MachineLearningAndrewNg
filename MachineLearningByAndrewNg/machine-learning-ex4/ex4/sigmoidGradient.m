@@ -8,11 +8,20 @@ function g = sigmoidGradient(z)
 
 g = zeros(size(z));
 
+valueOfSizeOfZ = size(z);			% This is a debug comment
+valueOfG = g;					% This is a debug comment
+noOfRows = valueOfSizeOfZ(1); 
+noOfCols = valueOfSizeOfZ(2);
+
 % ====================== YOUR CODE HERE ======================
 % Instructions: Compute the gradient of the sigmoid function evaluated at
 %               each value of z (z can be a matrix, vector or scalar).
 
-
+for i = 1: noOfRows,
+	for j = 1: noOfCols,
+		g(i, j) = g(i, j) + ((sigmoid(z(i, j))) * (1 - (sigmoid(z(i, j)))));
+	end
+end
 
 
 

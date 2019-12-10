@@ -30,13 +30,13 @@ J = 0;
 Theta1_grad = zeros(size(Theta1));
 Theta2_grad = zeros(size(Theta2));
 
-sizeOfTheta1 = size(Theta1)		% This is a debug comment 25x401
-sizeOfTheta2 = size(Theta2)		% This is a debug comment 10x26
-valueOfM = m				% This is a debug comment 5000
-sizeOfY = size(y)			% This is a debug comment 5000x1
-valueOfNumLabels = num_labels		% This is a debug comment 10
-valueOfLambda = lambda			% This is a debug comment 0
-sizeOfX = size(X)			% This is a debug comment 5000x400
+sizeOfTheta1 = size(Theta1);		% This is a debug comment 25x401
+sizeOfTheta2 = size(Theta2);		% This is a debug comment 10x26
+valueOfM = m;				% This is a debug comment 5000
+sizeOfY = size(y);			% This is a debug comment 5000x1
+valueOfNumLabels = num_labels;		% This is a debug comment 10
+valueOfLambda = lambda;			% This is a debug comment 0
+sizeOfX = size(X);			% This is a debug comment 5000x400
 
 % ====================== YOUR CODE HERE ======================
 % Instructions: You should complete the code by working through the
@@ -48,14 +48,14 @@ sizeOfX = size(X)			% This is a debug comment 5000x400
 %         computed in ex4.m
 
 p = zeros(size(X, 1), 1);
-sizeOfP = size(p)				% This is a debug comment 5000x1
+sizeOfP = size(p);				% This is a debug comment 5000x1
 
-size(sigmoid([ones(m, 1) X] * Theta1'))		% This is a debug comment 5000x25
+size(sigmoid([ones(m, 1) X] * Theta1'));	% This is a debug comment 5000x25
 h1 = sigmoid([ones(m, 1) X] * Theta1');		% 5000x25
-size(sigmoid([ones(m, 1) h1] * Theta2'))	% This is a debug comment 5000x10
+size(sigmoid([ones(m, 1) h1] * Theta2'));	% This is a debug comment 5000x10
 h2 = sigmoid([ones(m, 1) h1] * Theta2');	% 5000x10
 [dummy, p] = max(h2, [], 2);			
-sizeOfP = size(p)				% This is a debug comment 5000x1
+sizeOfP = size(p);				% This is a debug comment 5000x1
 
 yModified = zeros(m, num_labels);		% Create a new matrix with m rows and num_labels cols.
 sizeOfYMdofied = size(yModified)		% This is a debug comment 5000x10
@@ -66,7 +66,28 @@ for i = 1:m,
 	yModified(i, index) = 1;
 end
 
+% Cost function
 J = (sum(sum((-yModified .* log(h2)) - ((1 - yModified) .* log(1 - h2))))) / m;
+
+% Cost function with regularization
+thetaOneSquared = 0;
+thetaTwoSquared = 0;
+sizeOfTheta1One = size(Theta1);
+sizeOfTheta2Two = size(Theta2);
+
+for j = 1:sizeOfTheta1One(1),
+	for k = 2:(sizeOfTheta1One(2)),
+		thetaOneSquared = thetaOneSquared + (Theta1(j, k) * Theta1(j, k));
+	end
+end
+
+for j = 1:sizeOfTheta2Two(1),
+	for k = 2:(sizeOfTheta2Two(2)),
+		thetaTwoSquared = thetaTwoSquared + (Theta2(j, k) * Theta2(j, k));
+	end
+end
+
+J = J + ((thetaOneSquared + thetaTwoSquared) * (lambda/(2 * m)));
 
 %
 % Part 2: Implement the backpropagation algorithm to compute the gradients
