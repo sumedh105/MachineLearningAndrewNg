@@ -60,7 +60,7 @@ h2 = sigmoid([ones(m, 1) h1] * Theta2');	% 5000x10
 sizeOfP = size(p);				% This is a debug comment 5000x1
 
 yModified = zeros(m, num_labels);		% Create a new matrix with m rows and num_labels cols.
-sizeOfYMdofied = size(yModified)		% This is a debug comment 5000x10
+sizeOfYMdofied = size(yModified);		% This is a debug comment 5000x10
 
 % Code to add 1 where the digit has been identified.
 for i = 1:m,
@@ -75,7 +75,7 @@ J = (sum(sum((-yModified .* log(h2)) - ((1 - yModified) .* log(1 - h2))))) / m;
 thetaOneSquared = 0;
 thetaTwoSquared = 0;
 sizeOfTheta1One = size(Theta1);
-sizeOfTheta2Two = size(Theta2)
+sizeOfTheta2Two = size(Theta2);
 
 for j = 1:sizeOfTheta1One(1),
 	for k = 2:(sizeOfTheta1One(2)),
@@ -152,7 +152,7 @@ for t = 1:m,
 	sizeOfdelta_2 = size(delta_2);			% This is a debug comment: 26x1
 	delta_2 = delta_2(2:end);			% Remove the top row from delta_2
 	sizeOfdelta_2 = size(delta_2);			% This is a debug comment: 25x1
-	delta_2 = delta_2 .* sigmoidGradient(z_2);
+	delta_2 = delta_2 .* sigmoidGradient(z_2);	% Calculate delta_2
 	sizeOfdelta_2 = size(delta_2);			% This is a debug comment 25x1
 	valueOfdelta_2 = delta_2;			% This is a debug comment
 	%=========================End of step three======================================
@@ -167,7 +167,9 @@ end
 
 %=========================Start of step five===================================
 Theta1_grad = (Theta1_grad / m);
+sizeOfTheta1_grad = size(Theta1_grad);			% This is a debug comment
 Theta2_grad = (Theta2_grad / m);
+sizeOfTheta2_grad = size(Theta2_grad);			% This is a debug comment
 %=========================End of step five=====================================
 
 %
@@ -179,22 +181,14 @@ Theta2_grad = (Theta2_grad / m);
 %               and Theta2_grad from Part 2.
 %
 
+Theta1_modified = Theta1;
+Theta2_modified = Theta2;
 
+Theta1_modified(:, 1) = 0;
+Theta2_modified(:, 1) = 0;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Theta1_grad = Theta1_grad + ((lambda / m) * Theta1_modified);
+Theta2_grad = Theta2_grad + ((lambda / m) * Theta2_modified);
 
 
 % -------------------------------------------------------------
