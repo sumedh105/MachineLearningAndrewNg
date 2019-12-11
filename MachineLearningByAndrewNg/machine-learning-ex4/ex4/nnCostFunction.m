@@ -30,13 +30,15 @@ J = 0;
 Theta1_grad = zeros(size(Theta1));
 Theta2_grad = zeros(size(Theta2));
 
-sizeOfTheta1 = size(Theta1);		% This is a debug comment 25x401
-sizeOfTheta2 = size(Theta2);		% This is a debug comment 10x26
-valueOfM = m;				% This is a debug comment 5000
-sizeOfY = size(y);			% This is a debug comment 5000x1
-valueOfNumLabels = num_labels;		% This is a debug comment 10
-valueOfLambda = lambda;			% This is a debug comment 0
-sizeOfX = size(X);			% This is a debug comment 5000x400
+sizeOfTheta1 = size(Theta1);			% This is a debug comment 25x401
+sizeOfTheta2 = size(Theta2);			% This is a debug comment 10x26
+valueOfM = m;					% This is a debug comment 5000
+sizeOfY = size(y);				% This is a debug comment 5000x1
+valueOfNumLabels = num_labels;			% This is a debug comment 10
+valueOfLambda = lambda;				% This is a debug comment 0
+sizeOfX = size(X);				% This is a debug comment 5000x400
+valueOfInputLayerSize = input_layer_size;	% This is a debug comment 400
+valueOfHiddenLayerSize = hidden_layer_size;	% This is a debug comment 25
 
 % ====================== YOUR CODE HERE ======================
 % Instructions: You should complete the code by working through the
@@ -73,7 +75,7 @@ J = (sum(sum((-yModified .* log(h2)) - ((1 - yModified) .* log(1 - h2))))) / m;
 thetaOneSquared = 0;
 thetaTwoSquared = 0;
 sizeOfTheta1One = size(Theta1);
-sizeOfTheta2Two = size(Theta2);
+sizeOfTheta2Two = size(Theta2)
 
 for j = 1:sizeOfTheta1One(1),
 	for k = 2:(sizeOfTheta1One(2)),
@@ -103,7 +105,71 @@ J = J + ((thetaOneSquared + thetaTwoSquared) * (lambda/(2 * m)));
 %
 %         Hint: We recommend implementing backpropagation using a for-loop
 %               over the training examples if you are implementing it for the 
-%               first time.
+%               first timer
+
+%Delta_2 = zeros(sizeOfTheta2Two - 1)
+Delta_1 = 0;
+Delta_2 = 0;
+x = zeros(1, input_layer_size);
+sizeOfx = size(x);				% This is a debug comment: 1x400
+sizeOfBigX = size(X);				% This is a debug comment: 5000x400
+
+for t = 1:m,
+	yModified = zeros(num_labels, 1);	% Create a new num_labelsx1 matrix
+
+	%=========================Start of step one======================================
+	x = X(t, :);				% Extracting the first row from 5000 rows
+	sizeOfx = size(x);			% This is a debug comment: 1x400
+	x = x';					% Take the prime of x
+	sizeOfNewX = size(x);			% This is a debug comment: 400x1
+	x = [1; x];				% Add a new row on top of x: 401x1
+	sizeOfNewX = size(x);			% This is a debug comment: 401x1
+	a_1 = x;				% Assign the input feature to a_1
+	sizeOfA1 = size(a_1);			% This is a debug comment 401x1
+	z_2 = Theta1 * a_1;			% Calculate z_2 = [25*401]*[401*1]
+	sizeOfZ2 = size(z_2);			% This is a debug comment: 25x1
+	a_2 = sigmoid(z_2);			% Calculate the sigmoid of z2.
+	sizeOfA2 = size(a_2);			% This is a debug comment: 25x1
+	a_2 = [1; a_2];				% Add a new row on top of a_2.
+	sizeOfA2 = size(a_2);			% This is a debug comment: 26x1
+	z_3 = Theta2 * a_2;			% Calculate z_3 = [10x26]*[26x1]
+	sizeOfZ3 = size(z_3);			% This is a debug comment: 10x1
+	a_3 = sigmoid(z_3);			% Calculate the sigmoid of z3.
+	sizeOfA3 = size(a_3);			% This is a debug comment: 10x1
+	valueOfA3 = a_3;			% This is a debug comment
+	%=========================End of step one========================================
+
+	%=========================Start of step two======================================
+	valueOfY = y(t, :);			% Get the value of y
+	yModified(valueOfY, :) = 1;		% Recode the y vector
+	delta_3 = a_3 - yModified;		% Calculate delta_3
+	sizeOfDelta3 = size(delta_3);		% This is a debug comment 10x1
+	valueOfDelta3 = delta_3;		% This is a debug comment
+	%=========================End of step two========================================
+
+	%=========================Start of step three====================================
+	delta_2 = (Theta2)' * delta_3;			% delta_2: [26x10] * [10x1]
+	sizeOfdelta_2 = size(delta_2);			% This is a debug comment: 26x1
+	delta_2 = delta_2(2:end);			% Remove the top row from delta_2
+	sizeOfdelta_2 = size(delta_2);			% This is a debug comment: 25x1
+	delta_2 = delta_2 .* sigmoidGradient(z_2);
+	sizeOfdelta_2 = size(delta_2);			% This is a debug comment 25x1
+	valueOfdelta_2 = delta_2;			% This is a debug comment
+	%=========================End of step three======================================
+
+	%=========================Start of step four=====================================
+	Theta1_grad = (Theta1_grad + (delta_2 * a_1'));		% Calculate Theta1_grad
+	sizeOfTheta1_grad = size(Theta1_grad);			% This is a debug comment: 25x401
+	Theta2_grad = (Theta2_grad + (delta_3 * a_2'));		% Calculate Theta2_grad
+	sizeOfTheta2_grad = size(Theta2_grad);			% This is a debug comment: 10x26
+	%=========================End of step four=======================================
+end
+
+%=========================Start of step five===================================
+Theta1_grad = (Theta1_grad / m);
+Theta2_grad = (Theta2_grad / m);
+%=========================End of step five=====================================
+
 %
 % Part 3: Implement regularization with the cost function and gradients.
 %
