@@ -47,7 +47,14 @@ x = zeros(n, 1);
 %              x = [ 0 0 0 0 1 0 0 0 ... 0 0 0 0 1 ... 0 0 0 1 0 ..];
 %
 %
+lengthOfWordIndices = length(word_indices);			% This is a debug comment
 
+for index = 1:length(word_indices),
+	value = word_indices(index)
+	x(value) = 1;
+end
+
+%k
 
 
 
