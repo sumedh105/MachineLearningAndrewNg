@@ -11,11 +11,11 @@ function [U, S] = pca(X)
 U = zeros(n);
 S = zeros(n);
 
-sizeOfX = size(X);				% This is a debug comment: 50x2
-sizeOfU = size(U);				% This is a debug comment: 2x2
-sizeOfA = size(S);				% This is a debug comment: 2x2
-valueOfM = m;					% This is a debug comment: 50
-valueOfN = n;					% This is a debug comment: 2
+sizeOfX = size(X)				% This is a debug comment: 50x2
+sizeOfU = size(U)				% This is a debug comment: 2x2
+sizeOfA = size(S)				% This is a debug comment: 2x2
+valueOfM = m					% This is a debug comment: 50
+valueOfN = n					% This is a debug comment: 2
 
 % ====================== YOUR CODE HERE ======================
 % Instructions: You should first compute the covariance matrix. Then, you
